@@ -98,3 +98,4 @@ async def send_data(data, send, status=HTTPStatus.OK):
             "body":  json.dumps(data).encode(),
         }
     )
+
