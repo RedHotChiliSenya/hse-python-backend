@@ -18,7 +18,7 @@ async def is_castable_to_positive_int(n, send):
         
 
 
-async def application(
+async def app(
         scope,
         receive,
         send
