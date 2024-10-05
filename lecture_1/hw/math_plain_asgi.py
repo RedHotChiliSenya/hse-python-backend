@@ -23,8 +23,9 @@ async def app(
         receive,
         send
 ):
-    if scope['method'] != 'GET':
+    if scope['type'] != 'http':
         await send_data({"error": "Not Found"}, send, HTTPStatus.NOT_FOUND)
+        return
     path = scope['path']
 
     if path == "/factorial":
