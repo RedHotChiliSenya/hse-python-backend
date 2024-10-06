@@ -1,7 +1,8 @@
 from typing import List, Optional
 
 
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException, Response, Request
+from prometheus_client import make_asgi_app, generate_latest, Counter, Histogram
 from pydantic import BaseModel, ConfigDict
 from http import HTTPStatus
 
@@ -38,7 +39,15 @@ items = {}
 carts = {}
 
 app = FastAPI(title="Shop API")
+metrics_app = make_asgi_app()
+app.mount("/metrics", metrics_app)
 
+request_count = Counter("request_count", "Request number")
+
+@app.middleware("http")
+async def add_prometheus_metrics(request: Request, call_next):
+    request_count.inc()
+    return await call_next(request)
 
 
 @app.post("/item", status_code=HTTPStatus.CREATED)
